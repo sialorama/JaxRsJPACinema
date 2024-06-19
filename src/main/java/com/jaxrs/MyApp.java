@@ -4,18 +4,21 @@ package com.jaxrs;
 import com.jaxrs.model.Acteur;
 import com.jaxrs.model.Film;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.xml.bind.annotation.XmlElement;
 
 import java.util.List;
 
-@Path("/hello")
-public class HelloResource {
+@Path("/myapp")
+public class MyApp {
     @GET
     @Produces("text/plain")
+
     public String hello() {
-        return "Hello, World!";
+        return "Bienvenue à mon API Cinema";
     }
 
     @GET
@@ -34,22 +37,27 @@ public class HelloResource {
         List<Film> films = em.createQuery("from Film", Film.class).getResultList() ;
         return films;
     }
+    // method getActeurById
     @GET
-    @Path("/{id}")
+    @Path("/getById/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getActeurById(@PathParam("id") int id) {
         EntityManager em = JPAUtil.getEntityManager();
         try {
             Acteur acteur = em.find(Acteur.class, id);
             if (acteur == null) {
-                return Response.status(Response.Status.NOT_FOUND).entity("Acteur non trouvé").build();
+                return Response.status(Response.Status.NOT_FOUND)
+                        .entity("Product with ID " + id + " not found")
+                        .build();
             }
             return Response.ok(acteur).build();
-        } finally {
-            em.close();
+        } catch (PersistenceException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error retrieving product")
+                    .build();
         }
     }
-    @POST
+        @POST
     @Path("/add")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
