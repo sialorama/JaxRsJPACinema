@@ -1,27 +1,29 @@
-package com.jaxrs.model;
+package com.jaxrs.model; // Ajustez le package si nécessaire
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
-@Table(name = "acteur")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Acteur {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String nom;
     private String prenom;
+    private String photo; // Nouvelle propriété
 
-    // Constructors, getters, setters, toString
-
-    public Acteur() {}
-
-    public Acteur(String nom, String prenom) {
-        this.nom = nom;
-        this.prenom = prenom;
+    // Getters et setters
+    public Long getId() {
+        return id;
     }
 
-    public int getId() {
-        return id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNom() {
@@ -40,12 +42,11 @@ public class Acteur {
         this.prenom = prenom;
     }
 
-    @Override
-    public String toString() {
-        return "Acteur{" +
-                "id=" + id +
-                ", nom='" + nom + '\'' +
-                ", prenom='" + prenom + '\'' +
-                '}';
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }
