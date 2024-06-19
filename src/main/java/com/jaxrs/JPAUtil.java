@@ -5,10 +5,10 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 public class JPAUtil {
-    private static final EntityManagerFactory entityManagerFactory =
-            Persistence.createEntityManagerFactory("cinemaPU");
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("cinemaPU");
 
     public static EntityManager getEntityManager() {
-        return entityManagerFactory.createEntityManager();
+        return emf.createEntityManager();
     }
+
 }

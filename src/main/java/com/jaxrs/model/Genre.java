@@ -1,3 +1,4 @@
+/*
 package com.jaxrs.model;
 
 import jakarta.persistence.*;
@@ -40,3 +41,4 @@ public class Genre {
         this.genre = genre;
     }
 }
+*/
