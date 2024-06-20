@@ -1,37 +1,31 @@
 package com.jaxrs.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
-@Table(name = "film")
 public class Film {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String titre;
-    private String description;
-    private String affiche;
+    private String genre;
+    private String synopsis;
 
-    public Film(){}
+    @ManyToMany
+    @JsonIgnore
+    private Set<Acteur> acteurs = new HashSet<>();
 
-    public Film(int id, String titre, String description, String affiche){
-        this.id = id;
-        this.titre = titre;
-        this.description = description;
-        this.affiche = affiche;
-
-    }
-    public Film( String nom, String prenom, String photo) {
-        this.titre = nom;
-        this.description = prenom;
-        this.affiche = photo;
-    }
-
-    public int getId() {
+    // Getters et setters
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -40,23 +34,31 @@ public class Film {
     }
 
     public void setTitre(String titre) {
-        titre = titre;
+        this.titre = titre;
     }
 
-    public String getDescription() {
-        return description;
+    public String getGenre() {
+        return genre;
     }
 
-    public void setDescription(String description) {
-        description = description;
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 
-    public String getAffiche() {
-        return affiche;
+    public String getSynopsis() {
+        return synopsis;
     }
 
-    public void setAffiche(String affiche) {
-        affiche = affiche;
+    public void setSynopsis(String synopsis) {
+        this.synopsis = synopsis;
     }
 
+    public Set<Acteur> getActeurs() {
+        return acteurs;
+    }
+
+    public void setActeurs(Set<Acteur> acteurs) {
+        this.acteurs = acteurs;
+    }
 }
+

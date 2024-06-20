@@ -79,7 +79,7 @@ public class MyApp {
                     .build();
         }
     }
-
+    // method addActeur
     @POST
     @Path("/addActeur")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -102,4 +102,44 @@ public class MyApp {
                     .build();
         }
     }
+    // Récupérer les Films d'un Acteur
+    @GET
+    @Path("/getFilmsByActeur/{acteurId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFilmsByActeur(@PathParam("acteurId") Long acteurId) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            Acteur acteur = em.find(Acteur.class, acteurId);
+            if (acteur != null) {
+                // Forcer l'initialisation des films
+                acteur.getFilms().size();
+                return Response.ok().entity(acteur.getFilms()).build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).entity("Acteur non trouvé").build();
+            }
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+    }
+
+           /* // Récupérer les Acteurs d'un Film
+            @GET
+            @Path("/getActeursByFilm/{id}")
+            @Produces(MediaType.APPLICATION_JSON)
+            public Response getActeursByFilm (@PathParam("id") Long id){
+                EntityManager em = JPAUtil.getEntityManager();
+                try {
+                    Film film = em.find(Film.class, id);
+                    if (film != null) {
+                        return Response.ok().entity(film.getActeurs()).build();
+                    } else {
+                        return Response.status(Response.Status.NOT_FOUND)
+                                .entity("Film non trouvé")
+                                .build();
+                    }
+                }
+            }*/
+
 }

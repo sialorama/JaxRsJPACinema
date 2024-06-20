@@ -1,13 +1,12 @@
-package com.jaxrs.model; // Ajustez le package si nécessaire
+package com.jaxrs.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Acteur {
 
     @Id
@@ -15,38 +14,11 @@ public class Acteur {
     private Long id;
     private String nom;
     private String prenom;
-    private String photo; // Nouvelle propriété
+    private String photo;
 
-    // Getters et setters
-    public Long getId() {
-        return id;
-    }
+        @ManyToMany(mappedBy = "acteurs")
+        @JsonIgnore
+        private Set<Film> films = new HashSet<>();
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public String getPrenom() {
-        return prenom;
-    }
-
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
 }
