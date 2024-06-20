@@ -2,7 +2,9 @@ package com.jaxrs;
 
 
 import com.jaxrs.model.Acteur;
+import com.jaxrs.model.ActeurService;
 import com.jaxrs.model.Film;
+import com.jaxrs.model.FilmService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
 import jakarta.ws.rs.*;
@@ -10,12 +12,15 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
+import java.util.Set;
 
 @Path("/myapp")
 public class MyApp {
+    private ActeurService acteurService = new ActeurService();
+    private FilmService filmService = new FilmService();
+
     @GET
     @Produces("text/plain")
-
     public String hello() {
         return "Bienvenue à mon API Cinema";
     }
@@ -102,4 +107,15 @@ public class MyApp {
                     .build();
         }
     }
+    @GET
+    @Path("/films/{id}/acteurs")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getActeursByFilm(@PathParam("id") Long filmId) {
+        Set<Acteur> acteurs = filmService.getActeursByFilm(filmId);
+        if (acteurs == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Film non trouvé.").build();
+        }
+        return Response.ok(acteurs).build();
+    }
+
 }

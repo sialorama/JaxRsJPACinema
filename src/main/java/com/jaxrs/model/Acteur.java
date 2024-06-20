@@ -1,29 +1,32 @@
-package com.jaxrs.model; // Ajustez le package si nécessaire
+package com.jaxrs.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Acteur {
-
+    // attributs et annotations
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nom;
     private String prenom;
-    private String photo; // Nouvelle propriété
 
-    // Getters et setters
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "acteur_film",
+            joinColumns = @JoinColumn(name = "acteur_id"),
+            inverseJoinColumns = @JoinColumn(name = "film_id")
+    )
+    @JsonManagedReference
+    private Set<Film> films = new HashSet<>();
+    // Getters and Setters
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getNom() {
@@ -42,11 +45,12 @@ public class Acteur {
         this.prenom = prenom;
     }
 
-    public String getPhoto() {
-        return photo;
+    public Set<Film> getFilms() {
+        return films;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setFilms(Set<Film> films) {
+        this.films = films;
     }
 }
+
