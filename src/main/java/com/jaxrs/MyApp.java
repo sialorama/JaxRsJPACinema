@@ -107,6 +107,7 @@ public class MyApp {
                     .build();
         }
     }
+    // Methode getActeursByFilm
     @GET
     @Path("/films/{id}/acteurs")
     @Produces(MediaType.APPLICATION_JSON)
@@ -117,5 +118,16 @@ public class MyApp {
         }
         return Response.ok(acteurs).build();
     }
+    // Methode getFilmsByActeur
+//    @GET
+//    @Path("/acteurs/{id}/films")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response getFilmsByActeur(@PathParam("id") Long acteurId) {
+//        Set<Film> films = acteurService.getFilmsByActeur(acteurId);
+//        if (films == null) {
+//            return Response.status(Response.Status.NOT_FOUND).entity("Acteur non trouvé.").build();
+//        }
+//        return Response.ok(films).build();
+//    }
 
 }

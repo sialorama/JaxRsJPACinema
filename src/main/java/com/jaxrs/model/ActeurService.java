@@ -2,6 +2,7 @@ package com.jaxrs.model;
 
 import com.jaxrs.JPAUtil;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 
 import java.util.List;
 import java.util.Set;
@@ -39,13 +40,23 @@ public class ActeurService {
         }
         return acteur;
     }
-    // Get Acteurs by Film
-    public List<Acteur> getActeursByFilm(Long filmId) {
+    // Get Films by Acteur
+    /*public List<Film> getFilmsByActeur(int acteurId) throws Exception {
         EntityManager em = JPAUtil.getEntityManager();
-        Film film = em.find(Film.class, filmId);
-        if (film != null) {
-            return film.getActeurs().stream().toList();
+        List<Film> films = null;
+
+        try {
+            Acteur acteur = em.find(Acteur.class, acteurId);
+            if (acteur == null) {
+                throw new NoResultException("Acteur with ID " + acteurId + " not found.");
+            }
+            // Load films associated with the actor
+            films = acteur.getFilms();
+            films.size(); // Force initialization of lazy-loaded collection
+        } finally {
+            em.close();
         }
-        return null; // Ou gérer l'erreur selon votre choix
-    }
+
+        return films;
+    }*/
 }

@@ -11,8 +11,9 @@ public class Film {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String titre;
+    private String description;
+    private String affiche;
 
     @ManyToMany(mappedBy = "films", fetch = FetchType.LAZY)
     @JsonBackReference
@@ -20,10 +21,12 @@ public class Film {
 
     // Getters and Setters
     public Long getId() {
+
         return id;
     }
 
     public String getTitre() {
+
         return titre;
     }
 
@@ -31,11 +34,27 @@ public class Film {
         this.titre = titre;
     }
 
-    public Set<Acteur> getActeurs() {
-        return acteurs;
+    public String getAffiche() {
+        return affiche;
     }
 
+    public void setAffiche(String affiche) {
+        this.affiche = affiche;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public Set<Acteur> getActeurs() {
+
+        return acteurs;
+    }
     public void setActeurs(Set<Acteur> acteurs) {
+
         this.acteurs = acteurs;
     }
 }
