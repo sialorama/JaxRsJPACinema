@@ -1,10 +1,11 @@
 package com.jaxrs;
 
 
+import com.jaxrs.dto.ActeurDTO;
 import com.jaxrs.model.Acteur;
-import com.jaxrs.model.ActeurService;
+import com.jaxrs.service.ActeurService;
 import com.jaxrs.model.Film;
-import com.jaxrs.model.FilmService;
+import com.jaxrs.service.FilmService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
 import jakarta.ws.rs.*;
@@ -84,39 +85,36 @@ public class MyApp {
                     .build();
         }
     }
+
     // method addActeur
     @POST
     @Path("/addActeur")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addActeur(Acteur acteur) {
-        EntityManager em = JPAUtil.getEntityManager();
+    public Response addActeur(ActeurDTO acteurDTO) {
         try {
-            em.getTransaction().begin();
-            em.persist(acteur);
-            em.getTransaction().commit();
-            return Response.status(Response.Status.CREATED)
-                    .entity(acteur)
-                    .build();
-        } catch (PersistenceException e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("Erreur lors de l'ajout de l'acteur")
+            Acteur acteur = acteurService.addActeur(acteurDTO);
+            return Response.ok(acteur).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Error: " + e.getMessage())
                     .build();
         }
     }
+
     // Methode getActeursByFilm
     @GET
-    @Path("/films/{id}/acteurs")
+    @Path("/getActeursByFilm/{filmId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getActeursByFilm(@PathParam("id") Long filmId) {
-        Set<Acteur> acteurs = filmService.getActeursByFilm(filmId);
-        if (acteurs == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("Film non trouvé.").build();
+    public Response getActeursByFilm(@PathParam("filmId") Long filmId) {
+        try {
+            List<Acteur> acteurs = filmService.getActeursByFilm(filmId);
+            return Response.ok(acteurs).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Error: " + e.getMessage())
+                    .build();
         }
-        return Response.ok(acteurs).build();
     }
     // Methode getFilmsByActeur
 //    @GET
@@ -129,5 +127,4 @@ public class MyApp {
 //        }
 //        return Response.ok(films).build();
 //    }
-
 }

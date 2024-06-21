@@ -7,7 +7,7 @@ import java.util.Set;
 
 @Entity
 public class Film {
-
+    // attributs et annotations
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,46 +15,34 @@ public class Film {
     private String description;
     private String affiche;
 
-    @ManyToMany(mappedBy = "films", fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "acteur_film",
+            joinColumns = @JoinColumn(name = "acteur_id"),
+            inverseJoinColumns = @JoinColumn(name = "film_id")
+    )
     @JsonBackReference
     private Set<Acteur> acteurs = new HashSet<>();
 
     // Getters and Setters
-    public Long getId() {
+    public Long getId() { return id; }
 
-        return id;
-    }
-
-    public String getTitre() {
-
-        return titre;
-    }
-
+    public String getTitre() { return titre; }
     public void setTitre(String titre) {
         this.titre = titre;
     }
-
     public String getAffiche() {
         return affiche;
     }
-
     public void setAffiche(String affiche) {
         this.affiche = affiche;
     }
-
     public String getDescription() {
         return description;
     }
-
     public void setDescription(String description) {
         this.description = description;
     }
-    public Set<Acteur> getActeurs() {
-
-        return acteurs;
-    }
-    public void setActeurs(Set<Acteur> acteurs) {
-
-        this.acteurs = acteurs;
-    }
+    public Set<Acteur> getActeurs() { return acteurs; }
+    public void setActeurs(Set<Acteur> acteurs) { this.acteurs = acteurs; }
 }
