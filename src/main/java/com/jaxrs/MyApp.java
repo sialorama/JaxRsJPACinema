@@ -6,6 +6,7 @@ import com.jaxrs.model.Acteur;
 import com.jaxrs.service.ActeurService;
 import com.jaxrs.model.Film;
 import com.jaxrs.service.FilmService;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
 import jakarta.ws.rs.*;
@@ -64,7 +65,6 @@ public class MyApp {
                     .build();
         }
     }
-
     // method getActeurById
     @GET
     @Path("/getFilmById/{id}")
@@ -85,7 +85,6 @@ public class MyApp {
                     .build();
         }
     }
-
     // method addActeur
     @POST
     @Path("/addActeur")
@@ -101,7 +100,6 @@ public class MyApp {
                     .build();
         }
     }
-
     // Methode getActeursByFilm
     @GET
     @Path("/getActeursByFilm/{filmId}")
@@ -116,15 +114,18 @@ public class MyApp {
                     .build();
         }
     }
-    // Methode getFilmsByActeur
-//    @GET
-//    @Path("/acteurs/{id}/films")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response getFilmsByActeur(@PathParam("id") Long acteurId) {
-//        Set<Film> films = acteurService.getFilmsByActeur(acteurId);
-//        if (films == null) {
-//            return Response.status(Response.Status.NOT_FOUND).entity("Acteur non trouvé.").build();
-//        }
-//        return Response.ok(films).build();
-//    }
+     // Methode getFilmsByActeur
+    @GET
+    @Path("/getFilmsByActeur/{acteurId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFilmsByActeur(@PathParam("acteurId") Long acteurId) {
+        try {
+            List<Film> films = acteurService.getFilmsByActeur(acteurId);
+            return Response.ok(films).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("Error: " + e.getMessage())
+                    .build();
+        }
+    }
 }

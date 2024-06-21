@@ -52,7 +52,6 @@ public class ActeurService {
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-
             // Récupération de l'acteur
             Acteur acteur = em.find(Acteur.class, acteurId);
             if (acteur == null) {
@@ -77,5 +76,28 @@ public class ActeurService {
             }
             throw e;
         }
+    }
+    // Methde getFilmsByActeur
+    public List<Film> getFilmsByActeur(Long acteurId) throws Exception {
+        EntityManager em = JPAUtil.getEntityManager();
+        List<Film> films = null;
+        try {
+            EntityTransaction tx = em.getTransaction();
+            tx.begin();
+            Acteur acteur = em.find(Acteur.class, acteurId);
+            if (acteur == null) {
+                throw new Exception("Acteur not found");
+            }
+            films.addAll(acteur.getFilms());
+            tx.commit();
+        } catch (Exception e){
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw e;
+        }finally {
+            em.close();
+        }
+        return films;
     }
 }
